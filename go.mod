@@ -313,3 +313,6 @@ require (
 replace github.com/moby/moby/api => ./api
 
 replace github.com/moby/moby/client => ./client
+
+// Orqesta SwarmKit is the sole distributed scheduler used by this engine.
+replace github.com/moby/swarmkit/v2 => github.com/orqesta/swarmkit/v2 v2.0.0-20261112170507-cf6d063b76df
