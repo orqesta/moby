@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Run fast validation. Go Modules metadata is validated separately.
+# Run default validation checks.
 
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS=(

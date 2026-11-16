@@ -49,6 +49,6 @@ An example referenced from [Run targets inside a development container](/docs/co
 refer to
 [Run tests and test documentation](/docs/contributing/test.md)
 
-## Go Modules (modules.sh)
+## Go dependencies
 
-Run `./hack/modules.sh tidy` to synchronize `go.mod` and `go.sum` in the repository's Go modules. Dependencies are resolved through Go Modules; vendored source trees are not maintained.
+Moby uses standard Go Modules. The Go toolchain resolves dependencies from each module's `go.mod`, verifies downloads against `go.sum`, and caches modules outside the repository. No dependency installation script or vendored source tree is required.

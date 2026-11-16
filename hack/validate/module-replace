@@ -71,7 +71,6 @@ if [ -n "${TEST_FORCE_VALIDATE:-}" ] || [ -n "${api_diff}" ]; then
 	echo "Detected changes in ./api directory, checking for replace rule..."
 	if ! go list -mod=readonly -m -json github.com/moby/moby/api | jq -e '.Replace'; then
 		echo >&2 "ERROR: Changes detected in ./api but go.mod is missing a replace rule for github.com/moby/moby/api"
-		echo >&2 "Please run ./hack/modules.sh replace"
 		has_errors=1
 	else
 		echo "✓ Found replace rule for github.com/moby/moby/api"
@@ -89,7 +88,6 @@ if [ -n "${TEST_FORCE_VALIDATE:-}" ] || [ -n "${client_diff}" ]; then
 		echo >&2 "✓ This seems to only change the module github.com/moby/moby/api revision"
 	elif ! go list -mod=readonly -m -json github.com/moby/moby/client | jq -e '.Replace'; then
 		echo >&2 "ERROR: Changes detected in ./client but go.mod is missing a replace rule for github.com/moby/moby/client"
-		echo >&2 "Please run ./hack/modules.sh replace"
 		has_errors=1
 	else
 		echo "✓ Found replace rule for github.com/moby/moby/client"
