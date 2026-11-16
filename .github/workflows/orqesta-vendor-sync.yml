@@ -1,6 +1,7 @@
 name: orqesta-vendor-sync
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
