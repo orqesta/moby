@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+#
+# Validate Go Modules metadata without vendoring source dependencies.
+
+set -euo pipefail
+
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(cd "$SCRIPTDIR/../.." && pwd)"
+cd "$PROJECT_DIR"
+
+module_paths=(api client . man)
+module_files=(api/go.mod api/go.sum client/go.mod client/go.sum man/go.mod man/go.sum go.mod go.sum)
+
+for module_path in "${module_paths[@]}"; do
+    (
+        cd "$module_path"
+        go mod tidy
+        go mod verify
+    )
+done
+
+if ! git diff --quiet HEAD -- "${module_files[@]}"; then
+    echo "FAIL: Go Modules metadata is not synchronized" >&2
+    git diff -- "${module_files[@]}" >&2
+    exit 1
+fi
+
+echo "PASS: Go Modules metadata is synchronized"

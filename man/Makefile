@@ -3,8 +3,8 @@ mandir = $(prefix)/man
 INSTALL = install
 INSTALL_DATA = ${INSTALL} -m 644
 
-# By default, the man pages are generated using a copy of go-md2man built from
-# the vendored sources in this directory. This behavior can be overridden by
+# By default, the man pages are generated using go-md2man built with Go Modules.
+# This behavior can be overridden by
 # setting the GO_MD2MAN variable to the name/path of an existing go-md2man
 # binary.
 GO_MD2MAN ?= .build/go-md2man
@@ -42,7 +42,7 @@ install: all
 	done
 
 .build/go-md2man: go.mod go.sum
-	GO111MODULE=auto go build -o $@ github.com/cpuguy83/go-md2man/v2
+	go build -mod=readonly -o $@ github.com/cpuguy83/go-md2man/v2
 
 .PHONY: clean
 clean:

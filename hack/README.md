@@ -49,6 +49,6 @@ An example referenced from [Run targets inside a development container](/docs/co
 refer to
 [Run tests and test documentation](/docs/contributing/test.md)
 
-## Vendor (vendor.sh)
+## Go Modules (modules.sh)
 
-A shell script that is a wrapper around `go mod vendor`.
+Run `./hack/modules.sh tidy` to synchronize `go.mod` and `go.sum` in the repository's Go modules. Dependencies are resolved through Go Modules; vendored source trees are not maintained.

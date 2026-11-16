@@ -242,7 +242,7 @@ test-unit: build ## run the unit tests
 	$(DOCKER_RUN_DOCKER) hack/test/unit
 
 .PHONY: validate
-validate: build ## validate DCO, Seccomp profile generation, gofmt,\n./pkg/ isolation, golint, tests, tomls, go vet and vendor
+validate: build ## validate DCO, Seccomp profile generation, gofmt,\n./pkg/ isolation, golint, tests, tomls, go vet and Go Modules
 	$(DOCKER_RUN_DOCKER) hack/validate/all
 
 .PHONY: validate-generate-files
