@@ -206,7 +206,7 @@ ARG TARGETPLATFORM
 RUN --mount=from=runhcs-src,src=/usr/src/hcsshim,rw \
     --mount=type=cache,target=/root/.cache/go-build,id=runhcs-build-$TARGETPLATFORM <<EOT
   set -ex
-  CGO_ENABLED=0 xx-go build -mod=vendor -o /build/containerd-shim-runhcs-v1.exe ./cmd/containerd-shim-runhcs-v1
+  CGO_ENABLED=0 xx-go build -mod=mod -o /build/containerd-shim-runhcs-v1.exe ./cmd/containerd-shim-runhcs-v1
   xx-verify --static /build/containerd-shim-runhcs-v1.exe
 EOT
 

@@ -2,7 +2,7 @@
 
 package overlay
 
-//go:generate protoc -I=. -I=../../../../vendor/ --gogofaster_out=import_path=github.com/moby/moby/v2/daemon/libnetwork/drivers/overlay:. overlay.proto
+//go:generate protoc -I=. -I=github.com/gogo/protobuf=$GOGO_PROTOBUF_DIR --gogofaster_out=import_path=github.com/moby/moby/v2/daemon/libnetwork/drivers/overlay:. overlay.proto
 
 import (
 	"context"

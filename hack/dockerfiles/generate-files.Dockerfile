@@ -45,9 +45,12 @@ EOT
 FROM tools AS generated
 RUN --mount=from=src,source=/out,target=.,rw <<EOT
   set -ex
+  go mod download github.com/gogo/protobuf
+  export GOGO_PROTOBUF_DIR="$(go list -m -f '{{.Dir}}' github.com/gogo/protobuf)"
+  test -f "$GOGO_PROTOBUF_DIR/gogoproto/gogo.proto"
   go generate -v ./...
   mkdir /out
-  git ls-files -m --others -- ':!vendor' 'profiles/seccomp/default.json' '**/*.pb.go' | tar -cf - --files-from - | tar -C /out -xf -
+  git ls-files -m --others -- 'profiles/seccomp/default.json' '**/*.pb.go' | tar -cf - --files-from - | tar -C /out -xf -
 EOT
 
 FROM scratch AS update
@@ -61,7 +64,7 @@ RUN --mount=from=src,source=/out,target=.,rw \
   if [ "$(ls -A /generated-files)" ]; then
     cp -rf /generated-files/* .
   fi
-  diff=$(git status --porcelain -- ':!vendor' 'profiles/seccomp/default.json' '**/*.pb.go')
+  diff=$(git status --porcelain -- 'profiles/seccomp/default.json' '**/*.pb.go')
   if [ -n "$diff" ]; then
     echo >&2 'ERROR: The result of "go generate" differs. Please update with "make generate-files"'
     echo "$diff"
