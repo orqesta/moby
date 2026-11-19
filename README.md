@@ -100,6 +100,6 @@ Moby is licensed under the Apache License, Version 2.0. See
 [LICENSE](https://github.com/moby/moby/blob/master/LICENSE) for the full
 license text.
 
-## Orqesta fork architecture decisions
+## Orqesta integration
 
-See [architecture decision records](docs/adr/README.md) for verified fork-specific design decisions and their validation.
+See [Orqesta integration and build conventions](docs/orqesta-integration.md) for the fork-specific SwarmKit dependency, Go Modules setup, and current integration boundaries.
