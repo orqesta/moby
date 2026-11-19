@@ -1,6 +1,6 @@
 package networkdb
 
-//go:generate protoc -I=. --proto_path=github.com/gogo/protobuf=$GOGO_PROTOBUF_DIR --gogofaster_out=import_path=github.com/moby/moby/v2/daemon/libnetwork/networkdb:. networkdb.proto
+//go:generate go run github.com/moby/moby/v2/cmd/protogen -import-path=github.com/moby/moby/v2/daemon/libnetwork/networkdb networkdb.proto
 
 import (
 	"context"
