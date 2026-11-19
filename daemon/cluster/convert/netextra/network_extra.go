@@ -1,4 +1,4 @@
-//go:generate go run github.com/moby/moby/v2/cmd/protogen extra.proto
+//go:generate protoc --gogofaster_out=. extra.proto
 
 package netextra
 

@@ -1,3 +1,3 @@
-//go:generate go run github.com/moby/moby/v2/cmd/protogen -import-path=runtime plugin.proto
+//go:generate protoc --gogofaster_out=import_path=runtime:. plugin.proto
 
 package runtime

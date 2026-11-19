@@ -2,9 +2,21 @@
 
 ARG GO_VERSION=1.27.4
 ARG BASE_DEBIAN_DISTRO=trixie
+ARG PROTOC_VERSION=3.11.4
+
+# protoc is dynamically linked to glibc so can't use alpine base
 FROM golang:${GO_VERSION}-${BASE_DEBIAN_DISTRO} AS base
-RUN apt-get update && apt-get --no-install-recommends install -y git
+RUN apt-get update && apt-get --no-install-recommends install -y git unzip
+ARG PROTOC_VERSION
+ARG TARGETOS
+ARG TARGETARCH
 ENV GOTOOLCHAIN=local
+RUN <<EOT
+  set -e
+  arch=$(echo $TARGETARCH | sed -e s/amd64/x86_64/ -e s/arm64/aarch_64/)
+  wget -q https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-${TARGETOS}-${arch}.zip
+  unzip protoc-${PROTOC_VERSION}-${TARGETOS}-${arch}.zip -d /usr/local
+EOT
 WORKDIR /usr/src/moby
 
 FROM base AS src
@@ -23,6 +35,8 @@ FROM base AS tools
 RUN --mount=from=src,source=/out,target=.,rw \
     --mount=type=cache,target=/root/.cache/go-build <<EOT
   set -ex
+  # install all tools defined in go.mod
+  go install -v tool
   go build -v \
     -o /usr/bin/pluginrpc-gen \
     ./pkg/plugins/pluginrpc-gen
@@ -31,6 +45,9 @@ EOT
 FROM tools AS generated
 RUN --mount=from=src,source=/out,target=.,rw <<EOT
   set -ex
+  go mod download github.com/gogo/protobuf
+  export GOGO_PROTOBUF_DIR="$(go list -m -f '{{.Dir}}' github.com/gogo/protobuf)"
+  test -f "$GOGO_PROTOBUF_DIR/gogoproto/gogo.proto"
   go generate -v ./...
   mkdir /out
   git ls-files -m --others -- 'profiles/seccomp/default.json' '**/*.pb.go' | tar -cf - --files-from - | tar -C /out -xf -
